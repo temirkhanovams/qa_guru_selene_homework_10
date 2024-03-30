@@ -1,21 +1,10 @@
-from selene import be, by, command
+from selene import be, by, command, have
 from selene.support.shared import browser
 
 from qa_guru_selene_homework_10 import resource
 
 
 class RegistrationPage:
-    # def open(self):
-    #     print('\nОткрываю браузер')
-    #     browser.config.window_width = 1024
-    #     browser.config.window_height = 780
-    #     browser.open("https://demoqa.com/automation-practice-form")
-    #
-    #     yield
-    #
-    #     print('\nЗакрываю браузер')
-    #     browser.quit()
-
     def fill_first_name(self, value):
         browser.element('#firstName').should(be.blank).type(value)
 
@@ -48,26 +37,32 @@ class RegistrationPage:
         browser.with_(timeout=browser.config.timeout * 3).element(value).click()
 
     def fill_image(self, value):
-        # browser.element('#state').perform(command.js.scroll_into_view)
         browser.element('#uploadPicture').send_keys(resource.path(value))
 
-    def regestered_user_data(self):
-        return browser.element('.table').all('tr td:nth-child(2)')
+    def fill_address(self, value):
+        browser.element('#currentAddress').click().type(value)
 
+    def fill_city(self, param, param1):
+        browser.element('#react-select-3-input').should(be.blank).type(param).press_enter()
+        browser.element('#city').should(be.visible)
+        browser.element('#react-select-4-input').should(be.blank).type(param1).press_enter()
+        browser.element('#submit').should(be.visible).press_enter()
 
-    #
-    # def should_regestered_user_with(self, name, email, gender, phone, birthday, subjects, hobbies, file, address,
-    #                                 state):
-    #     browser.element('.table').all('tr td:nth-child(2)').should(have.texts
-    #         (
-    #         name,
-    #         email,
-    #         gender,
-    #         phone,
-    #         birthday,
-    #         subjects,
-    #         hobbies,
-    #         file,
-    #         address,
-    #         state
-    #     ) )
+    def click_button(self):
+        browser.element('#submit').execute_script('element.click()')
+
+    def should_regestered_user_with(self, name, email, gender, phone, birthday, subjects, hobbies, file, address,
+                                    state):
+        browser.element('.table').all('tr td:nth-child(2)').should(have.texts
+            (
+            name,
+            email,
+            gender,
+            phone,
+            birthday,
+            subjects,
+            hobbies,
+            file,
+            address,
+            state
+        ) )
