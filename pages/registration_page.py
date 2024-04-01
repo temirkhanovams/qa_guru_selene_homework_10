@@ -18,9 +18,8 @@ class RegistrationPage:
         self.image_selector = browser.element('#uploadPicture')
         self.address_selector = browser.element('#currentAddress')
         self.state_selector = browser.element('#state')
-        self.state_value_selector = browser.all('[id^=react-select][id*=option]')
         self.city_selector = browser.element('#city')
-        self.city_value_selector = browser.all('[id^=react-select][id*=option]')
+        self.state_city_value_selector = browser.all('[id^=react-select][id*=option]')
         self.submit_selector = browser.element('#submit')
         self.result_selector = browser.element('.table').all('tr td:nth-child(2)')
 
@@ -64,12 +63,24 @@ class RegistrationPage:
 
     def fill_state(self, state, city):
         self.state_selector.click()
-        self.state_value_selector.element_by(have.exact_text(state)).click()
+        self.state_city_value_selector.element_by(have.exact_text(state)).click()
         self.city_selector.click()
-        self.city_value_selector.element_by(have.exact_text(city)).click()
+        self.state_city_value_selector.element_by(have.exact_text(city)).click()
 
     def submit(self):
         self.submit_selector.perform(command.js.click)
+
+    def fill(self, admin: User):
+        self.fill_full_name(admin.first_name, admin.last_name)
+        self.fill_email(admin.email)
+        self.fill_gender(admin.gender)
+        self.fill_phone(admin.phone)
+        self.fill_birthday(admin.year, admin.month, admin.day)
+        self.fill_subjects(admin.subjects)
+        self.fill_hobbies(admin.hobbies)
+        self.fill_image(admin.file)
+        self.fill_address(admin.address)
+        self.fill_state(admin.state, admin.city)
 
     def should_registered_user_with(self, admin_result: ResultUser):
         self.result_selector.should(have.texts(
@@ -84,15 +95,3 @@ class RegistrationPage:
             admin_result.address,
             admin_result.state_city
         ))
-
-    def fill(self, admin: User):
-        self.fill_full_name(admin.first_name, admin.last_name)
-        self.fill_email(admin.email)
-        self.fill_gender(admin.gender)
-        self.fill_phone(admin.phone)
-        self.fill_birthday(admin.year, admin.month, admin.day)
-        self.fill_subjects(admin.subjects)
-        self.fill_hobbies(admin.hobbies)
-        self.fill_image(admin.file)
-        self.fill_address(admin.address)
-        self.fill_state(admin.state, admin.city)
