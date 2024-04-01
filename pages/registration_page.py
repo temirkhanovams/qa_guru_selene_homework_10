@@ -1,7 +1,6 @@
-from selene import browser, be, by, command, have
-
-from data.users import User, ResultUser
+from data.users import User
 from qa_guru_selene_homework_10 import resource
+from selene import browser, be, by, command, have
 
 
 class RegistrationPage:
@@ -82,16 +81,8 @@ class RegistrationPage:
         self.fill_address(admin.address)
         self.fill_state(admin.state, admin.city)
 
-    def should_registered_user_with(self, admin_result: ResultUser):
-        self.result_selector.should(have.texts(
-            admin_result.full_name,
-            admin_result.email,
-            admin_result.gender,
-            admin_result.phone,
-            admin_result.birthday,
-            admin_result.subjects,
-            admin_result.hobbies,
-            admin_result.file,
-            admin_result.address,
-            admin_result.state_city
-        ))
+    def should_registered_user_with(self, admin: User):
+        self.result_selector.should(
+            have.texts(f'{admin.first_name} {admin.last_name}', {admin.email}, {admin.gender}, {admin.phone},
+                {admin.birthday}, {admin.subjects}, {admin.hobbies}, {admin.file}, {admin.address},
+                f'{admin.state} {admin.city}'))
